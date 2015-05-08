@@ -28,9 +28,10 @@ public class MusicDatabase {
     public final static String DURATION_COLUMN = "duration";
     public final static String AUDIOURL_COLUMN = "audioURL";
 // TODO need variables for: Artist ID (it may not always be Boiled In Lead! Make this an int, unique across all tables), Artist Name (String), Album ID (int, unique across all tables), Song ID (int, unique across all tables), Album art (links to a jpg, probably lives in the Album table), Audio (links to the audio file, probably lives in the Song table)
-    // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a Belgian disco band."), playable video, Amazon link, Wikipedia page
+    // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a German disco band."), playable video, Amazon link, Wikipedia page
 
-       private static MusicDataModel musicDataModel;
+    private static MusicDataModel musicDataModel;
+    private static MusicTreeModel musicTreeModel;
 
     // TODO Should this main method be moved to the Main.java page?
     public static void main(String args[]) {
@@ -38,18 +39,17 @@ public class MusicDatabase {
         //setup creates database (if it doesn't exist), opens connection, and adds sample data
         setup();
         loadAllMusic();
+        loadTreeData();
 
         //Start GUI
-        BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
+        BiLPlayer biLPlayer = new BiLPlayer(musicDataModel,musicTreeModel);
 
     }
 
     //Create or recreate a ResultSet containing the whole database, and give it to musicDataModel
     public static void loadAllMusic(){
 
-        TreeModel m = new SimpleTreeTableModel();
         try{
-
             if (rs!=null) {
                 rs.close();
             }
@@ -67,6 +67,34 @@ public class MusicDatabase {
 
         } catch (Exception e) {
             System.out.println("Error loading or reloading music");
+            System.out.println(e);
+        }
+
+    }
+
+    //Create or recreate a ResultSet containing what albumTree needs to show, and give it to musicTreeModel
+    public static void loadTreeData(){
+
+        TreeModel m = new SimpleTreeTableModel(); // todo what is this? it was autocreated. do i need it?
+        try{
+
+            if (rs!=null) {
+                rs.close();
+            }
+
+            String getTreeData = "SELECT ALBUM_COLUMN, SONG_COLUMN, YEAR_COLUMN, DURATION_COLUMN FROM music";
+            rs = statement.executeQuery(getTreeData);
+
+            if (musicTreeModel == null) {
+                //If no current musicDataModel, then make one
+                musicTreeModel = new MusicTreeModel(rs);
+            } else {
+                //Or, if one already exists, update its ResultSet
+                musicTreeModel.updateResultSet(rs); // todo copy/mod this from MusicDataModel into MusicTreeModel
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error loading or reloading treee data");
             System.out.println(e);
         }
 

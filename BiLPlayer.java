@@ -23,7 +23,7 @@ import java.applet.AudioClip;
  */
 public class BiLPlayer extends JFrame implements WindowListener{
     private JTable musicDataTable;
-    private JPanel rootPanel;
+        private JPanel rootPanel;
     private JToggleButton playButton;
     private JLabel nowPlayingLabel;
     private JButton quitButton;
@@ -38,11 +38,12 @@ public class BiLPlayer extends JFrame implements WindowListener{
     private JButton fastForwardButton;
     private JButton rewindButton;
     private JTextField thisIsWhereExtendedTextField;
+    private JLabel titleLabel;
 
     private AudioClip songToPlay;
     private boolean isPlaying = false;
 
-    public BiLPlayer(MusicDataModel musicDataModel) {
+    public BiLPlayer(MusicDataModel musicDataModel, MusicTreeModel musicTreeModel) {
         setContentPane(rootPanel);
         pack();
         setVisible(true);
@@ -55,6 +56,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
         ImageIcon playerIcon_FF = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-FF.jpg");
         ImageIcon playerIcon_REWIND = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-REWIND.jpg");
         ImageIcon playerIcon_MUTE = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-MUTE.jpg");
+        ImageIcon bil_SquareLogo = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/bil-squarelogo.jpg");
         playButton.setIcon(playerIcon_PLAY);
         playButton.setSelectedIcon(playerIcon_PAUSE);
         muteButton.setIcon(playerIcon_MUTE);
@@ -62,13 +64,14 @@ public class BiLPlayer extends JFrame implements WindowListener{
         stopButton.setIcon(playerIcon_STOP);
         rewindButton.setIcon(playerIcon_REWIND);
         fastForwardButton.setIcon(playerIcon_FF);
+        titleLabel.setIcon(bil_SquareLogo);
         //Set up JTable
         musicDataTable.setGridColor(Color.BLUE);
         musicDataTable.setModel(musicDataModel);
 
         String[] stuff = {"first", "second"};
         albumTree = new JTree(stuff);
-//        albumTree.setModel(musicDataModel);
+        albumTree.setModel(musicTreeModel);
 
         //Hack to force JavaFX init
         //https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
