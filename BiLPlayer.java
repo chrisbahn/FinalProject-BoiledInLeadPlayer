@@ -9,11 +9,10 @@ package com.christopherbahn;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.AudioClip;
@@ -25,20 +24,20 @@ import java.applet.AudioClip;
 public class BiLPlayer extends JFrame implements WindowListener{
     private JTable musicDataTable;
     private JPanel rootPanel;
-    private JButton playButton;
+    private JToggleButton playButton;
     private JLabel nowPlayingLabel;
     private JButton quitButton;
     private JLabel playerStatusLabel;
-    private JButton stopMusic;
-
+    private JButton stopButton;
     private MediaPlayer player = null;
 //    private JLabel playPauseStopIcon;
     // Create a "clickable" image icon.
-    ImageIcon icon = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/Media-Player-Pause-fast-forward-backward-button-icon-vector.jpg");
-
-
-    private JToggleButton playPauseStopIcon;
+//    ImageIcon icon = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/Media-Player-Pause-fast-forward-backward-button-icon-vector.jpg");
+    private JToggleButton muteButton;
     private JTree albumTree;
+    private JButton fastForwardButton;
+    private JButton rewindButton;
+    private JTextField thisIsWhereExtendedTextField;
 
     private AudioClip songToPlay;
     private boolean isPlaying = false;
@@ -56,25 +55,32 @@ public class BiLPlayer extends JFrame implements WindowListener{
         ImageIcon playerIcon_FF = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-FF.jpg");
         ImageIcon playerIcon_REWIND = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-REWIND.jpg");
         ImageIcon playerIcon_MUTE = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-MUTE.jpg");
-        playPauseStopIcon.setIcon(playerIcon_PLAY);
-        playPauseStopIcon.setSelectedIcon(playerIcon_PAUSE);
+        playButton.setIcon(playerIcon_PLAY);
+        playButton.setSelectedIcon(playerIcon_PAUSE);
+        muteButton.setIcon(playerIcon_MUTE);
+        muteButton.setSelectedIcon(playerIcon_MUTE);
+        stopButton.setIcon(playerIcon_STOP);
+        rewindButton.setIcon(playerIcon_REWIND);
+        fastForwardButton.setIcon(playerIcon_FF);
         //Set up JTable
         musicDataTable.setGridColor(Color.BLUE);
         musicDataTable.setModel(musicDataModel);
+
+        String[] stuff = {"first", "second"};
+        albumTree = new JTree(stuff);
+//        albumTree.setModel(musicDataModel);
 
         //Hack to force JavaFX init
         //https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
         new javafx.embed.swing.JFXPanel();
 
 
-        String[] stuff = {"first", "second"};
-        albumTree = new JTree(stuff);
 
-        playPauseStopIcon.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent me) {
-                System.out.println("CLICKED");
-            }
-        });
+
+        if (player != null) {
+            playerStatusLabel.setText(player.getStatus() + "!");
+            System.out.println(player.getStatus() + "!");
+        }
 
         playButton.addActionListener(new ActionListener() {
             @Override
@@ -94,22 +100,18 @@ public class BiLPlayer extends JFrame implements WindowListener{
                 //TODO stopping, pausing, not blocking the GUI thread when the song is playing....
                 if (player != null) {
                     if (player.getMedia().getSource().equals(audioURL)) { // to find out if the audio is already playing
-                        System.out.println("already playing " + audioURL);
+                        player.pause();
+                        System.out.println("already playing " + songTitle);
                     }
-
-                    player.stop();
-                    player.dispose();
                 }
-
-
-
+                // TODO need a proper toggle from pause to play. currently player simply restarts song
                 Media mediaObject = new Media((String) audioURL);
                 player = new MediaPlayer(mediaObject);
                 player.play();
                 System.out.println("player is playing");
 
-                playerStatusLabel.setText(player.getStatus() + "!");
-                System.out.println(player.getStatus() + "!");
+//                playerStatusLabel.setText(player.getStatus() + "!");
+//                System.out.println(player.getStatus() + "!");
 
 
 
@@ -128,13 +130,43 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
         musicDataTable.addComponentListener(new ComponentAdapter() {
         });
-        stopMusic.addActionListener(new ActionListener() {
+        stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (player != null) {
                     player.stop();
                     player.dispose();
                 }
+            }
+        });
+        rewindButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            // TODO song selection moves to previous row. Problem: What if user selects a different row while song is playing, then hits rewind? In that case, this would play the song one up from the selected row, not the current song. Also: If you hit rewind while on first song, simply restart first song.
+            }
+        });
+        fastForwardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            // TODO song selection moves to NEXT row. Otherwise this has similar issues as rewindButton.
+            }
+        });
+        muteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        thisIsWhereExtendedTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        albumTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+
             }
         });
     }
