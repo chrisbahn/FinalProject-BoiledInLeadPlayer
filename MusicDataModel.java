@@ -142,7 +142,7 @@ public class MusicDataModel extends AbstractTableModel {
     }
 
     //returns true if successful, false if error occurs
-    public boolean insertRow(String album, String song, int year, int time, String audioURL) {
+    public boolean insertRow(String album, String song, int year, int duration, String audioURL) {
 
         try {
             //Move to insert row, insert the appropriate data in each column, insert the row, move cursor back to where it was before we started
@@ -150,7 +150,7 @@ public class MusicDataModel extends AbstractTableModel {
             resultSet.updateString(MusicDatabase.ALBUM_COLUMN, album);
             resultSet.updateString(MusicDatabase.SONG_COLUMN, song);
             resultSet.updateInt(MusicDatabase.YEAR_COLUMN, year);
-            resultSet.updateInt(MusicDatabase.TIME_COLUMN, time);
+            resultSet.updateInt(MusicDatabase.DURATION_COLUMN, duration);
             resultSet.updateString(MusicDatabase.AUDIOURL_COLUMN, audioURL);
             resultSet.insertRow();
             resultSet.moveToCurrentRow();

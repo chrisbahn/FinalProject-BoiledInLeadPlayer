@@ -1,5 +1,8 @@
 package com.christopherbahn;
 
+import sun.jvm.hotspot.ui.treetable.SimpleTreeTableModel;
+
+import javax.swing.tree.TreeModel;
 import java.sql.*;
 
 /**
@@ -22,7 +25,7 @@ public class MusicDatabase {
     public final static String ALBUM_COLUMN = "album";
     public final static String SONG_COLUMN = "song";
     public final static String YEAR_COLUMN = "year_released";
-    public final static String TIME_COLUMN = "time";
+    public final static String DURATION_COLUMN = "duration";
     public final static String AUDIOURL_COLUMN = "audioURL";
 // TODO need variables for: Artist ID (it may not always be Boiled In Lead! Make this an int, unique across all tables), Artist Name (String), Album ID (int, unique across all tables), Song ID (int, unique across all tables), Album art (links to a jpg, probably lives in the Album table), Audio (links to the audio file, probably lives in the Song table)
     // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a Belgian disco band."), playable video, Amazon link, Wikipedia page
@@ -37,14 +40,14 @@ public class MusicDatabase {
         loadAllMusic();
 
         //Start GUI
-//        BiLPlayer tableGUI = new BiLPlayer(musicDataModel);
-        Player anotherTableGUI = new Player();
+        BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
 
     }
 
     //Create or recreate a ResultSet containing the whole database, and give it to musicDataModel
     public static void loadAllMusic(){
 
+        TreeModel m = new SimpleTreeTableModel();
         try{
 
             if (rs!=null) {
@@ -93,15 +96,15 @@ public class MusicDatabase {
             statement.executeUpdate(deleteOldTableSQL);
             System.out.println("deleted old music table");
 
-            //Create a table in the database with 5 columns: Album, song, year, time and audioURL.
-            // TODO time is an int representing seconds. To display this, you'll need to do a calculation to split this up into minutes & seconds. Also, total album length could be derived by adding up the time for all songs with that particular album ID
+            //Create a table in the database with 5 columns: Album, song, year, duration and audioURL.
+            // TODO duration is an int representing seconds. To display this, you'll need to do a calculation to split this up into minutes & seconds. Also, total album length could be derived by adding up the duration for all songs with that particular album ID
             String createTableSQL = "CREATE TABLE "
                     // TODO What are the basic variables for the SQL database? include them all here
                     + MUSIC_TABLE_NAME + " ("
                     + ALBUM_COLUMN + " varchar(50), "
                     + SONG_COLUMN + " varchar(50), "
                     + YEAR_COLUMN + " int, "
-                    + TIME_COLUMN + " int, "
+                    + DURATION_COLUMN + " int, "
                     + AUDIOURL_COLUMN + " varchar(200))";
             statement.executeUpdate(createTableSQL);
 
@@ -109,17 +112,21 @@ public class MusicDatabase {
             //
             // TODO Add some test data using the music dataset variables. For a small starting dataset, choose songs from four different albums
             // TODO Once the database itself is proven to work, you'll need to create another, much larger database that will include ALL the music. This will be imported into the program ONCE and then should not need to be imported again, if you've done everything right
-            String addDataSQL = "INSERT INTO music VALUES ('From the Ladle to the Grave', 'The Microorganism', 1989, 847, '/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/06TheMicroorganism.mp3')";
+            String addDataSQL = "INSERT INTO music VALUES ('From the Ladle to the Grave', 'Madman Blues', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/02MadmanMoraBlues.mp3')";
+            statement.executeUpdate(addDataSQL);
+            addDataSQL = "INSERT INTO music VALUES ('From the Ladle to the Grave', 'The Microorganism', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/06TheMicroorganism.mp3')";
+            statement.executeUpdate(addDataSQL);
+            addDataSQL = "INSERT INTO music VALUES ('Antler Dance!', 'Newry Highwayman', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/01NewryHighwayman.mp3')";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES ('Antler Dance!', 'Rasputin', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/09Rasputin.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Wedding Dress', 2012, 867, '/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/01WeddingDress.mp3')";
+            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Wedding Dress', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/01WeddingDress.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'The Well Below The Valley', 2012, 867, '/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/02TheWellBelowTheValley.mp3')";
+            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'The Well Below The Valley', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/02TheWellBelowTheValley.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Western Borders', 2012, 867, '/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/03WesternBorders.mp3')";
+            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Western Borders', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/03WesternBorders.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Transylvanian Stomp', 2012, 867, '/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/04TransylvanianStomp.mp3')";
+            addDataSQL = "INSERT INTO music VALUES ('The Well Below', 'Transylvanian Stomp', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/04TransylvanianStomp.mp3')";
             statement.executeUpdate(addDataSQL);
 
         } catch (SQLException se) {
