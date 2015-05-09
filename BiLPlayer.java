@@ -1,5 +1,6 @@
 package com.christopherbahn;
 // Code by Christopher Bahn, building from code from the following sources:
+// https://docs.oracle.com/javase/tutorial/uiswing/components/tree.html
 // https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
 // http://stackoverflow.com/questions/18340125/how-to-tell-if-mediaplayer-is-playing
 // https://docs.oracle.com/javafx/2/api/javafx/scene/media/MediaPlayer.html
@@ -11,11 +12,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.AudioClip;
+import java.net.URL;
 
 
 /**
@@ -40,10 +44,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
     private JTextField thisIsWhereExtendedTextField;
     private JLabel titleLabel;
 
-    private AudioClip songToPlay;
-    private boolean isPlaying = false;
-
-    public BiLPlayer(MusicDataModel musicDataModel, MusicTreeModel musicTreeModel) {
+    public BiLPlayer(MusicDataModel musicDataModel) {
         setContentPane(rootPanel);
         pack();
         setVisible(true);
@@ -69,9 +70,6 @@ public class BiLPlayer extends JFrame implements WindowListener{
         musicDataTable.setGridColor(Color.BLUE);
         musicDataTable.setModel(musicDataModel);
 
-        String[] stuff = {"first", "second"};
-        albumTree = new JTree(stuff);
-        albumTree.setModel(musicTreeModel);
 
         //Hack to force JavaFX init
         //https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
@@ -199,4 +197,89 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
     @Override
     public void windowDeactivated(WindowEvent e) {}
+
+    public void makeTree() {
+        //        String[] stuff = {"first", "second"};
+        //     albumTree = new JTree(stuff);
+//        albumTree.setModel(musicTreeModel);
+        // TODO perhaps you're going about this wrong. If you already have the complete RS, can you select from that as you do with the Music Table to make the Tree data?
+//        albumTree.add("The Well Below", ?);
+
+        DefaultMutableTreeNode top =
+                new DefaultMutableTreeNode("Boiled in Lead albums");
+        createNodes(top);
+        albumTree = new JTree(top);
+//        albumTree.setVisible(true);
+        albumTree.getSelectionModel().setSelectionMode
+                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+    }
+
+    private void createNodes(DefaultMutableTreeNode top) {
+        DefaultMutableTreeNode album = null;
+        DefaultMutableTreeNode song = null;
+
+        album = new DefaultMutableTreeNode("Orb");
+        top.add(album);
+
+        album = new DefaultMutableTreeNode("The Well Below");
+        top.add(album);
+
+        song = new DefaultMutableTreeNode(new SongInfo
+                ("Wedding Dress",
+                        "tutorial.html"));
+        album.add(song);
+
+//        //Tutorial Continued
+//        book = new DefaultMutableTreeNode(new BookInfo
+//                ("The Java Tutorial Continued: The Rest of the JDK",
+//                        "tutorialcont.html"));
+//        category.add(book);
+//
+//        //Swing Tutorial
+//        book = new DefaultMutableTreeNode(new BookInfo
+//                ("The Swing Tutorial: A Guide to Constructing GUIs",
+//                        "swingtutorial.html"));
+//        category.add(book);
+//
+//        //...add more books for programmers...
+//
+//        category = new DefaultMutableTreeNode("Books for Java Implementers");
+//        top.add(category);
+//
+//        //VM
+//        book = new DefaultMutableTreeNode(new BookInfo
+//                ("The Java Virtual Machine Specification",
+//                        "vm.html"));
+//        category.add(book);
+//
+//        //Language Spec
+//        book = new DefaultMutableTreeNode(new BookInfo
+//                ("The Java Language Specification",
+//                        "jls.html"));
+//        category.add(book);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
+
+
+    private class SongInfo {
+        public String songName;
+// TODO ADD THE NECESSARY COMPONENTS OF A SONG FROM THE SQL DB        public URL bookURL;
+        public SongInfo(String song, String filename) {
+            songName = song;
+//            bookURL = getClass().getResource(filename);
+//            if (bookURL == null) {
+//                System.err.println("Couldn't find file: "
+//                        + filename);
+//            }
+        }
+        public String toString() {
+            return songName;
+        }
+    }
+
+
 }

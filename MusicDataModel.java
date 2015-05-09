@@ -91,7 +91,6 @@ public class MusicDataModel extends AbstractTableModel {
 
     //returns true if successful, false if error occurs
     public boolean insertRow(String album, String song, int year, int duration, String audioURL) {
-
         try {
             //Move to insert row, insert the appropriate data in each column, insert the row, move cursor back to where it was before we started
             resultSet.moveToInsertRow();
@@ -108,13 +107,11 @@ public class MusicDataModel extends AbstractTableModel {
             //Return true to the calling method so we know that the ResultSet
             //was successfully updated, and it can request a new ResultSet for this tablemodel.
             return true;
-
         } catch (SQLException e) {
             System.out.println("Error adding row");
             System.out.println(e);
             return false;
         }
-
     }
 
     @Override

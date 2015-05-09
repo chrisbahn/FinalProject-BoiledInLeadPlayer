@@ -1,8 +1,8 @@
 package com.christopherbahn;
 
-import sun.jvm.hotspot.ui.treetable.SimpleTreeTableModel;
+// some code on this page found/modified from here: http://www.codejava.net/java-se/swing/jtree-basic-tutorial-and-examples
 
-import javax.swing.tree.TreeModel;
+import javax.swing.*;
 import java.sql.*;
 
 /**
@@ -31,7 +31,7 @@ public class MusicDatabase {
     // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a German disco band."), playable video, Amazon link, Wikipedia page
 
     private static MusicDataModel musicDataModel;
-    private static MusicTreeModel musicTreeModel;
+//    private static MusicTreeModel musicTreeModel;
 
     // TODO Should this main method be moved to the Main.java page?
     public static void main(String args[]) {
@@ -39,21 +39,29 @@ public class MusicDatabase {
         //setup creates database (if it doesn't exist), opens connection, and adds sample data
         setup();
         loadAllMusic();
-        loadTreeData();
+//        loadTreeData();
 
         //Start GUI
-        BiLPlayer biLPlayer = new BiLPlayer(musicDataModel,musicTreeModel);
+        final BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
+
+        // TODO do I need this to help populate the JTree?
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    biLPlayer.makeTree();
+                }
+            });
+
+
 
     }
 
     //Create or recreate a ResultSet containing the whole database, and give it to musicDataModel
     public static void loadAllMusic(){
-
         try{
             if (rs!=null) {
                 rs.close();
             }
-
             String getAllData = "SELECT * FROM music";
             rs = statement.executeQuery(getAllData);
 
@@ -64,41 +72,33 @@ public class MusicDatabase {
                 //Or, if one already exists, update its ResultSet
                 musicDataModel.updateResultSet(rs);
             }
-
         } catch (Exception e) {
             System.out.println("Error loading or reloading music");
             System.out.println(e);
         }
-
     }
 
     //Create or recreate a ResultSet containing what albumTree needs to show, and give it to musicTreeModel
-    public static void loadTreeData(){
-
-        TreeModel m = new SimpleTreeTableModel(); // todo what is this? it was autocreated. do i need it?
-        try{
-
-            if (rs!=null) {
-                rs.close();
-            }
-
-            String getTreeData = "SELECT ALBUM_COLUMN, SONG_COLUMN, YEAR_COLUMN, DURATION_COLUMN FROM music";
-            rs = statement.executeQuery(getTreeData);
-
-            if (musicTreeModel == null) {
-                //If no current musicDataModel, then make one
-                musicTreeModel = new MusicTreeModel(rs);
-            } else {
-                //Or, if one already exists, update its ResultSet
-                musicTreeModel.updateResultSet(rs); // todo copy/mod this from MusicDataModel into MusicTreeModel
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error loading or reloading treee data");
-            System.out.println(e);
-        }
-
-    }
+//    public static void loadTreeData(){
+//        try{
+//            if (rs!=null) {
+//                rs.close();
+//            }
+//            String getTreeData = "SELECT ALBUM_COLUMN, SONG_COLUMN, YEAR_COLUMN, DURATION_COLUMN FROM music";
+//            rs = statement.executeQuery(getTreeData);
+//
+//            if (musicTreeModel == null) {
+//                //If no current musicDataModel, then make one
+//                musicTreeModel = new MusicTreeModel(rs);
+//            } else {
+//                //Or, if one already exists, update its ResultSet
+//                musicTreeModel.updateResultSet(rs); // todo copy/mod this from MusicDataModel into MusicTreeModel
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error loading or reloading tree data");
+//            System.out.println(e);
+//        }
+//    }
 
     public static void setup(){
         try {

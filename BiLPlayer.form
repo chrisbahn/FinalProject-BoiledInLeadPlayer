@@ -36,12 +36,6 @@
             </constraints>
             <properties/>
           </component>
-          <hspacer id="910eb">
-            <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag weightx="0.0" weighty="0.0"/>
-            </constraints>
-          </hspacer>
           <vspacer id="f3a58">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
@@ -50,15 +44,6 @@
           </vspacer>
         </children>
       </grid>
-      <component id="ebdb4" class="javax.swing.JLabel" binding="nowPlayingLabel">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Now playing"/>
-        </properties>
-      </component>
       <component id="b9c79" class="javax.swing.JButton" binding="quitButton">
         <constraints>
           <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -66,33 +51,6 @@
         </constraints>
         <properties>
           <text value="Quit"/>
-        </properties>
-      </component>
-      <component id="bd2e4" class="javax.swing.JLabel" binding="playerStatusLabel">
-        <constraints>
-          <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="state of player"/>
-        </properties>
-      </component>
-      <component id="c717c" class="javax.swing.JButton" binding="fastForwardButton">
-        <constraints>
-          <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="FF"/>
-        </properties>
-      </component>
-      <component id="b0426" class="javax.swing.JButton" binding="rewindButton" default-binding="true">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Rewind"/>
         </properties>
       </component>
       <component id="7b24" class="javax.swing.JTextField" binding="thisIsWhereExtendedTextField" default-binding="true">
@@ -115,34 +73,6 @@
           <text value="Stop"/>
         </properties>
       </component>
-      <component id="184f2" class="javax.swing.JToggleButton" binding="muteButton">
-        <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <background color="-13595080"/>
-          <text value="Mute"/>
-        </properties>
-      </component>
-      <component id="d7738" class="javax.swing.JTree" binding="albumTree">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="503a3" class="javax.swing.JToggleButton" binding="playButton">
-        <constraints>
-          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Play"/>
-        </properties>
-      </component>
       <component id="4cd7a" class="javax.swing.JLabel" binding="titleLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
@@ -150,6 +80,75 @@
         </constraints>
         <properties>
           <text value="Boiled in Lead music player"/>
+        </properties>
+      </component>
+      <scrollpane id="dd078">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="d7738" class="javax.swing.JTree" binding="albumTree">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="b0426" class="javax.swing.JButton" binding="rewindButton" default-binding="true">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Rewind"/>
+        </properties>
+      </component>
+      <component id="503a3" class="javax.swing.JToggleButton" binding="playButton">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Play"/>
+        </properties>
+      </component>
+      <component id="c717c" class="javax.swing.JButton" binding="fastForwardButton">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="FF"/>
+        </properties>
+      </component>
+      <component id="184f2" class="javax.swing.JToggleButton" binding="muteButton">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-13595080"/>
+          <text value="Mute"/>
+        </properties>
+      </component>
+      <component id="ebdb4" class="javax.swing.JLabel" binding="nowPlayingLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Now playing"/>
+        </properties>
+      </component>
+      <component id="bd2e4" class="javax.swing.JLabel" binding="playerStatusLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="state of player"/>
         </properties>
       </component>
     </children>
