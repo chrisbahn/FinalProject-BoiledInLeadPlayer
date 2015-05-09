@@ -104,6 +104,8 @@ public class BiLPlayer extends JFrame implements WindowListener{
                         player.pause();
                         System.out.println("already playing " + songTitle);
                     }
+
+
                 }
                 // TODO need a proper toggle from pause to play. currently player simply restarts song
                 Media mediaObject = new Media((String) audioURL);
@@ -267,7 +269,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
     private class SongInfo {
         public String songName;
-// TODO ADD THE NECESSARY COMPONENTS OF A SONG FROM THE SQL DB        public URL bookURL;
+// TODO ADD THE NECESSARY COMPONENTS OF A SONG FROM THE SQL DB
         public SongInfo(String song, String filename) {
             songName = song;
 //            bookURL = getClass().getResource(filename);
