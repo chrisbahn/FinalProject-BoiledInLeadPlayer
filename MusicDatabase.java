@@ -31,18 +31,19 @@ public class MusicDatabase {
     // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a German disco band."), playable video, Amazon link, Wikipedia page
 
     private static MusicDataModel musicDataModel;
-//    private static MusicTreeModel musicTreeModel;
+    private static MusicTreeModel musicTreeModel;
 
     // TODO Should this main method be moved to the Main.java page?
     public static void main(String args[]) {
 
         //setup creates database (if it doesn't exist), opens connection, and adds sample data
         setup();
-        loadAllMusic();
-//        loadTreeData();
+      //  loadAllMusic();
+        loadTreeData();
 
         //Start GUI
-        final BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
+//        final BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
+        final BiLPlayer biLPlayer = new BiLPlayer(musicTreeModel);
 
         // TODO do I need this to help populate the JTree?
             SwingUtilities.invokeLater(new Runnable() {
@@ -79,26 +80,26 @@ public class MusicDatabase {
     }
 
     //Create or recreate a ResultSet containing what albumTree needs to show, and give it to musicTreeModel
-//    public static void loadTreeData(){
-//        try{
-//            if (rs!=null) {
-//                rs.close();
-//            }
-//            String getTreeData = "SELECT ALBUM_COLUMN, SONG_COLUMN, YEAR_COLUMN, DURATION_COLUMN FROM music";
-//            rs = statement.executeQuery(getTreeData);
-//
-//            if (musicTreeModel == null) {
-//                //If no current musicDataModel, then make one
-//                musicTreeModel = new MusicTreeModel(rs);
-//            } else {
-//                //Or, if one already exists, update its ResultSet
-//                musicTreeModel.updateResultSet(rs); // todo copy/mod this from MusicDataModel into MusicTreeModel
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error loading or reloading tree data");
-//            System.out.println(e);
-//        }
-//    }
+    public static void loadTreeData(){
+        try{
+            if (rs!=null) {
+                rs.close();
+            }
+            String getTreeData = "SELECT * FROM music";
+            rs = statement.executeQuery(getTreeData);
+
+            if (musicTreeModel == null) {
+                //If no current musicDataModel, then make one
+                musicTreeModel = new MusicTreeModel(rs);
+            } else {
+                //Or, if one already exists, update its ResultSet
+                musicTreeModel.updateResultSet(rs);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading or reloading tree data");
+            System.out.println(e);
+        }
+    }
 
     public static void setup(){
         try {

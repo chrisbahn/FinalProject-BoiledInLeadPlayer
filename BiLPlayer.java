@@ -8,6 +8,7 @@ package com.christopherbahn;
 
 // todo ths should be replaced by the music player that works
 
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -44,7 +45,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
     private JTextField thisIsWhereExtendedTextField;
     private JLabel titleLabel;
 
-    public BiLPlayer(MusicDataModel musicDataModel) {
+    public BiLPlayer(MusicTreeModel musicTreeModel) {
         setContentPane(rootPanel);
         pack();
         setVisible(true);
@@ -67,13 +68,13 @@ public class BiLPlayer extends JFrame implements WindowListener{
         fastForwardButton.setIcon(playerIcon_FF);
         titleLabel.setIcon(bil_SquareLogo);
         //Set up JTable
-        musicDataTable.setGridColor(Color.YELLOW);
-        musicDataTable.setModel(musicDataModel);
-
-
+//        musicDataTable.setGridColor(Color.YELLOW);
+//        musicDataTable.setModel(musicDataModel);
+        albumTree.setModel(musicTreeModel);
+      //  makeTree();
         //Hack to force JavaFX init
         //https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
-        new javafx.embed.swing.JFXPanel();
+        new JFXPanel();
 
 
 
@@ -206,6 +207,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
     public void windowDeactivated(WindowEvent e) {}
 
     public void makeTree() {
+        System.out.println("making tree");
         //        String[] stuff = {"first", "second"};
         //     albumTree = new JTree(stuff);
 //        albumTree.setModel(musicTreeModel);
@@ -216,18 +218,19 @@ public class BiLPlayer extends JFrame implements WindowListener{
                 new DefaultMutableTreeNode("Boiled in Lead albums");
         createNodes(top);
         albumTree = new JTree(top);
-//        albumTree.setVisible(true);
+        albumTree.setVisible(true);
         albumTree.getSelectionModel().setSelectionMode
                 (TreeSelectionModel.SINGLE_TREE_SELECTION);
 
     }
 
     private void createNodes(DefaultMutableTreeNode top) {
-        DefaultMutableTreeNode album = null;
-        DefaultMutableTreeNode song = null;
+        DefaultMutableTreeNode album;
+        DefaultMutableTreeNode song;
 
         album = new DefaultMutableTreeNode("Orb");
         top.add(album);
+        top.insert(album,0);
 
         album = new DefaultMutableTreeNode("The Well Below");
         top.add(album);

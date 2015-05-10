@@ -66,8 +66,10 @@ public class MusicTreeModel implements TreeModel {
     }
 
     // TODO Create a method to populate the JTree out of the musicTreeModel rs. You will eventually want album art in here too
+
+    // TODO Is this needed? If it's never called, can I just delete it?
     //returns true if successful, false if error occurs
-    public boolean insertRow(String album, String song, int year, int duration) {
+    public boolean insertRow(String album, String song, int year, int duration, String audioURL) {
         try {
             //Move to insert row, insert the appropriate data in each column, insert the row, move cursor back to where it was before we started
             resultSet.moveToInsertRow();
@@ -75,10 +77,10 @@ public class MusicTreeModel implements TreeModel {
             resultSet.updateString(MusicDatabase.SONG_COLUMN, song);
             resultSet.updateInt(MusicDatabase.YEAR_COLUMN, year);
             resultSet.updateInt(MusicDatabase.DURATION_COLUMN, duration);
-//            resultSet.updateString(MusicDatabase.AUDIOURL_COLUMN, audioURL);
+            resultSet.updateString(MusicDatabase.AUDIOURL_COLUMN, audioURL);
             resultSet.insertRow();
             resultSet.moveToCurrentRow();
-//            fireTableDataChanged(); // todo did you need an equivalent of this?
+//            fireValueChanged(); // todo This is the JTree equivalent of the Table method fireTableDataChanged. How is it needed here?
             //This change goes to DB but is *not* reflected in this result set
             //So need to close and re-open result set to see latest data
             //Return true to the calling method so we know that the ResultSet
