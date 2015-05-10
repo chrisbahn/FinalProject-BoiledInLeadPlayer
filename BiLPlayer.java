@@ -67,7 +67,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
         fastForwardButton.setIcon(playerIcon_FF);
         titleLabel.setIcon(bil_SquareLogo);
         //Set up JTable
-        musicDataTable.setGridColor(Color.BLUE);
+        musicDataTable.setGridColor(Color.YELLOW);
         musicDataTable.setModel(musicDataModel);
 
 
@@ -99,19 +99,24 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
                 //Once JavaFX init has occurred, can play a MP3 using JavaFX Media/MediaPlayer classes
                 //TODO stopping, pausing, not blocking the GUI thread when the song is playing....
-                if (player != null) {
-                    if (player.getMedia().getSource().equals(audioURL)) { // to find out if the audio is already playing
-                        player.pause();
-                        System.out.println("already playing " + songTitle);
-                    }
 
-
-                }
+                // TODO need a method here for forcing the player to play the first song if the user does not choose a row before hitting play
+//                if (player != null) {
+//                    if (player.getMedia().getSource().equals(audioURL)) { // to find out if the audio is already playing
+//                        player.pause();
+//                        System.out.println("already playing " + songTitle);
+//                    }
+//                }
                 // TODO need a proper toggle from pause to play. currently player simply restarts song
-                Media mediaObject = new Media((String) audioURL);
-                player = new MediaPlayer(mediaObject);
-                player.play();
-                System.out.println("player is playing");
+                if(playButton.isSelected()){
+                    Media mediaObject = new Media((String) audioURL);
+                    player = new MediaPlayer(mediaObject);
+                    player.play();
+                    System.out.println("player is playing");
+                } else {
+                    player.pause();
+                    System.out.println("player is paused");
+                }
 
 //                playerStatusLabel.setText(player.getStatus() + "!");
 //                System.out.println(player.getStatus() + "!");
