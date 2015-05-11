@@ -25,9 +25,9 @@ public class MusicDatabase {
     static ResultSet rs = null;
 
     public final static String MUSIC_TABLE_NAME = "music";
-    public final static String RELEASEORDER_COLUMN = "album";
+    public final static String RELEASEORDER_COLUMN = "albumNumber";
     public final static String ALBUM_COLUMN = "album";
-    public final static String TRACKNUMBER_COLUMN = "album";
+    public final static String TRACKNUMBER_COLUMN = "trackNumber";
     public final static String SONG_COLUMN = "song";
     public final static String YEAR_COLUMN = "year_released";
     public final static String DURATION_COLUMN = "duration";
