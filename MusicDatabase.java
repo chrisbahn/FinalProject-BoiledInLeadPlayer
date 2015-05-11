@@ -3,6 +3,8 @@ package com.christopherbahn;
 // some code on this page found/modified from here: http://www.codejava.net/java-se/swing/jtree-basic-tutorial-and-examples
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import java.sql.*;
 import java.util.*;
 
@@ -52,7 +54,7 @@ public class MusicDatabase {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    biLPlayer.makeTree();
+//                    biLPlayer.makeTree();
                 }
             });
 
@@ -96,20 +98,35 @@ public class MusicDatabase {
             // Songs have an albumID of X, and a song ID of non-0 Y
             // iterate over rs. If songID == 0, create new parent node. If songID > 0, create child node to established parent node.
 
-
-
             try {
                 //Move cursor to the start...
                 rs.beforeFirst();
                 // next() method moves the cursor forward one row and returns true if there is another row ahead
+                int checker = 0; // testing to see if this attempt to create the JTree is working
                 while (rs.next()) {
+                    System.out.println("making tree " + checker);
+                    checker++;
+
+                    DefaultMutableTreeNode root = new DefaultMutableTreeNode("Boiled in Lead player");
+                    DefaultMutableTreeNode albumNode = new DefaultMutableTreeNode("Boiled in Lead player");
+                    DefaultMutableTreeNode songNode = new DefaultMutableTreeNode("Boiled in Lead player");
+//                    Album album;
+//                    Song song;
+                    //                    createNodes(root);
+//                    albumTree = new JTree(root);
+
                     // TODO     This is where the album/song nodes are created.
                     if (rs.getInt(2)==0) { // IF SONGID IS ZERO, THIS IS AN ALBUM NODE
-                        LinkedList<Song> tracks = new LinkedList<Song>();
-                        Album album = new Album(rs.getInt(0), rs.getString(1), rs.getInt(4), tracks, rs.getString(6));
+//                        LinkedList<Song> tracks = new LinkedList<Song>();
+//                        album = new Album(rs.getInt(0), rs.getString(1), rs.getInt(4), tracks, rs.getString(6));
+                        root.add(albumNode);
                     }
-                    // TODO IF songid is > 0, make it a song
-                }
+                    if (rs.getInt(2)>0) { // IF SONGID > ZERO, THIS IS A SONG NODE
+//                        song = new Song(rs.getInt(2), rs.getString(3), rs.getInt(5), rs.getString(6));
+//                        album.tracks.add(song);
+                        albumNode.add(songNode);
+                    }
+                    }
                 rs.beforeFirst();
             } catch (SQLException se) {
                 System.out.println("Error counting rows " + se);
@@ -154,24 +171,23 @@ public class MusicDatabase {
 
             System.out.println("Created music table");
             //
-            // TODO Add some test data using the music dataset variables. For a small starting dataset, choose songs from four different albums
-            // TODO Once the database itself is proven to work, you'll need to create another, much larger database that will include ALL the music. This will be imported into the program ONCE and then should not need to be imported again, if you've done everything right
+            // TODO Once the database is proven to work, create another database that will include ALL the music. This will be imported into the program ONCE and then should not need to be imported again, if you've done everything right
             // NOTE that the audioURL column is used for the URL of an mp3 in the case of songs, and for the URL of an image file in the case of albums. They will be handled differently during creation of the JTree
             String addDataSQL = "INSERT INTO music VALUES (1, 'Old Lead', 0, null, 1985, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-oldlead.jpg)";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 0, null, 1989, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-fromtheladletothegrave.jpg)";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 'Madman Blues', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/02MadmanMoraBlues.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 1, 'Madman Blues', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/02MadmanMoraBlues.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 'The Microorganism', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/06TheMicroorganism.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 2, 'The Microorganism', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/06TheMicroorganism.mp3')";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (3, 'Orb', 0, null, 1990, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-antlerdance.jpg)";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (4, 'Antler Dance', 0, null, 1994, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-antlerdance.jpg)";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (4, 'Antler Dance!', 'Newry Highwayman', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/01NewryHighwayman.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (4, 'Antler Dance!', 1, 'Newry Highwayman', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/01NewryHighwayman.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (4, 'Antler Dance!', 'Rasputin', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/09Rasputin.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (4, 'Antler Dance!', 2, 'Rasputin', 1994, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1994AntlerDance/09Rasputin.mp3')";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (5, 'Songs From the Gypsy', 0, null, 1995, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-songsfromthegypsy.jpg)";
             statement.executeUpdate(addDataSQL);
@@ -185,37 +201,37 @@ public class MusicDatabase {
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 0, null, 2008, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-silver.jpg)";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Apple Tree Wassail', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/01AppleTreeWassail.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 1, 'Apple Tree Wassail', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/01AppleTreeWassail.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'The Sunset', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/02TheSunset.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 2, 'The Sunset', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/02TheSunset.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Jolly Tinker', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/03JollyTinker.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 3, 'Jolly Tinker', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/03JollyTinker.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Silver Carp', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/04SilverCarp.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 4, 'Silver Carp', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/04SilverCarp.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Come In From the Rain', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/05ComeInFromTheRain.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 5, 'Come In From the Rain', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/05ComeInFromTheRain.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'House Carpenter', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/06HouseCarpenter.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 6, 'House Carpenter', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/06HouseCarpenter.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Berber', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/07Berber.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 7, 'Berber', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/07Berber.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Death On Hennepin', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/08DeathOnHennepin.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 8, 'Death On Hennepin', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/08DeathOnHennepin.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Corner House', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/09CornerHouse.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 9, 'Corner House', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/09CornerHouse.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Menfi', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/10Menfi.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 10, 'Menfi', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/10Menfi.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 'Rushes Green', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/11RushesGreen.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (10, 'Silver', 11, 'Rushes Green', 2008, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2008Silver/11RushesGreen.mp3')";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 0, null, 2012, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-wellbelow.jpg)";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 'Wedding Dress', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/01WeddingDress.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 1, 'Wedding Dress', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/01WeddingDress.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 'The Well Below The Valley', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/02TheWellBelowTheValley.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 2, 'The Well Below The Valley', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/02TheWellBelowTheValley.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 'Western Borders', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/03WesternBorders.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 3, 'Western Borders', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/03WesternBorders.mp3')";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 'Transylvanian Stomp', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/04TransylvanianStomp.mp3')";
+            addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 4, 'Transylvanian Stomp', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/04TransylvanianStomp.mp3')";
             statement.executeUpdate(addDataSQL);
         } catch (SQLException se) {
             System.out.println("The Music table (probably) already exists, verify with following error message.");

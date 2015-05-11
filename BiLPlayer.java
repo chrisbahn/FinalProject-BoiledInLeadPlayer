@@ -214,16 +214,14 @@ public class BiLPlayer extends JFrame implements WindowListener{
         System.out.println("making tree");
         //        String[] stuff = {"first", "second"};
         //     albumTree = new JTree(stuff);
-//        albumTree.setModel(musicTreeModel);
-        // TODO perhaps you're going about this wrong. If you already have the complete RS, can you select from that as you do with the Music Table to make the Tree data?
-//        albumTree.add("The Well Below", ?);
+        //        albumTree.setModel(musicTreeModel);
+        //        albumTree.add("The Well Below", ?);
 
-        DefaultMutableTreeNode root =
-                new DefaultMutableTreeNode("Boiled in Lead albums");
-        createNodes(root);
-        albumTree = new JTree(root);
+//        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Boiled in Lead albums");
+//        createNodes(root);
+//        albumTree = new JTree(root);
 //        albumTree.setModel(musicTreeModel);
-        albumTree.setVisible(true);
+//        albumTree.setVisible(true);
     //    albumTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
     }
