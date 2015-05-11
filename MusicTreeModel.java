@@ -5,6 +5,7 @@ package com.christopherbahn;
 //        http://stackoverflow.com/questions/10014015/java-jtree-populated-by-sql-query
 //        http://javaknowledge.info/populate-jtree-from-mysql-database/
 //          https://docs.oracle.com/javase/tutorial/uiswing/components/tree.html
+//        http://www.comp.nus.edu.sg/~cs3283/ftp/Java/swingConnect/tech_topics/treemodel/treemodel.html
 
         import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;

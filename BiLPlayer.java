@@ -15,6 +15,7 @@ import javafx.scene.media.MediaPlayer;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.event.TreeSelectionEvent;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.*;
@@ -44,6 +45,7 @@ public class BiLPlayer extends JFrame implements WindowListener{
     private JButton rewindButton;
     private JTextField thisIsWhereExtendedTextField;
     private JLabel titleLabel;
+    private JScrollPane albumTreeScrollPane;
 
     public BiLPlayer(MusicTreeModel musicTreeModel) {
         setContentPane(rootPanel);
@@ -52,6 +54,8 @@ public class BiLPlayer extends JFrame implements WindowListener{
         setTitle("Boiled in Lead Music Player");
         addWindowListener(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(new Dimension(800, 500));
+
         ImageIcon playerIcon_PLAY = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-PLAY.jpg");
         ImageIcon playerIcon_PAUSE = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-PAUSE.jpg");
         ImageIcon playerIcon_STOP = new ImageIcon("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/50px/playerIcon-STOP.jpg");
@@ -70,8 +74,8 @@ public class BiLPlayer extends JFrame implements WindowListener{
         //Set up JTable
 //        musicDataTable.setGridColor(Color.YELLOW);
 //        musicDataTable.setModel(musicDataModel);
-        albumTree.setModel(musicTreeModel);
-      //  makeTree();
+
+        //  makeTree();
         //Hack to force JavaFX init
         //https://www.daniweb.com/software-development/java/threads/475808/how-to-play-mp3-files-in-java-using-eclipse
         new JFXPanel();
@@ -214,13 +218,13 @@ public class BiLPlayer extends JFrame implements WindowListener{
         // TODO perhaps you're going about this wrong. If you already have the complete RS, can you select from that as you do with the Music Table to make the Tree data?
 //        albumTree.add("The Well Below", ?);
 
-        DefaultMutableTreeNode top =
+        DefaultMutableTreeNode root =
                 new DefaultMutableTreeNode("Boiled in Lead albums");
-        createNodes(top);
-        albumTree = new JTree(top);
+        createNodes(root);
+        albumTree = new JTree(root);
+//        albumTree.setModel(musicTreeModel);
         albumTree.setVisible(true);
-        albumTree.getSelectionModel().setSelectionMode
-                (TreeSelectionModel.SINGLE_TREE_SELECTION);
+    //    albumTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
     }
 
@@ -230,14 +234,12 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
         album = new DefaultMutableTreeNode("Orb");
         top.add(album);
-        top.insert(album,0);
+//        top.insert(album,0);
 
         album = new DefaultMutableTreeNode("The Well Below");
         top.add(album);
 
-        song = new DefaultMutableTreeNode(new SongInfo
-                ("Wedding Dress",
-                        "tutorial.html"));
+        song = new DefaultMutableTreeNode("Wedding Dress");
         album.add(song);
 
 //        //Tutorial Continued
