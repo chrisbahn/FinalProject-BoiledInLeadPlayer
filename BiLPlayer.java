@@ -6,13 +6,13 @@ package com.christopherbahn;
 // https://docs.oracle.com/javafx/2/api/javafx/scene/media/MediaPlayer.html
 // http://stackoverflow.com/questions/7359906/swing-jtoolbarbutton-pressing/7360696#7360696
 
-// todo ths should be replaced by the music player that works
 
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.TreeModel;
@@ -22,7 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.AudioClip;
 import java.net.URL;
-
+import java.io.*;
 
 /**
  * Created by christopherbahn on 4/21/15.
@@ -45,9 +45,8 @@ public class BiLPlayer extends JFrame implements WindowListener{
     private JButton rewindButton;
     private JTextField thisIsWhereExtendedTextField;
     private JLabel titleLabel;
-    private JScrollPane albumTreeScrollPane;
 
-    public BiLPlayer(MusicTreeModel musicTreeModel) {
+    public BiLPlayer(DefaultTableModel musicDataModel) {
         setContentPane(rootPanel);
         pack();
         setVisible(true);
@@ -72,8 +71,8 @@ public class BiLPlayer extends JFrame implements WindowListener{
         fastForwardButton.setIcon(playerIcon_FF);
         titleLabel.setIcon(bil_SquareLogo);
         //Set up JTable
-//        musicDataTable.setGridColor(Color.YELLOW);
-//        musicDataTable.setModel(musicDataModel);
+        musicDataTable.setGridColor(Color.BLUE);
+        musicDataTable.setModel(musicDataModel);
 
         //  makeTree();
         //Hack to force JavaFX init
@@ -93,10 +92,12 @@ public class BiLPlayer extends JFrame implements WindowListener{
             public void actionPerformed(ActionEvent e) {
                 // TODO If you hit the button more than once while on the same song, it should toggle audio on/off. Right now, it simply starts playing new audio on top of the old one. If you select a new song and hit that, it should stop the first song and start the new one.
                 int currentRow = musicDataTable.getSelectedRow();
-                Object album = musicDataTable.getValueAt(currentRow, 0);
-                Object songTitle = musicDataTable.getValueAt(currentRow, 1);
-                Object year = musicDataTable.getValueAt(currentRow, 2);
-                Object audioURL = musicDataTable.getValueAt(currentRow, 4);
+                Object album = musicDataTable.getValueAt(currentRow, 1);
+                Object songTitle = musicDataTable.getValueAt(currentRow, 3);
+                Object year = musicDataTable.getValueAt(currentRow, 4);
+                Object audioURL = musicDataTable.getValueAt(currentRow, 6);
+
+//                String audioURL = "file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/02MadmanMoraBlues.mp3";
 
                 nowPlayingLabel.setText("Now playing \"" + songTitle + "\" from " + album + " (" + year + ")!");
                 System.out.println("Now playing \"" + songTitle + "\" from " + album + " (" + year + ")!");
@@ -105,15 +106,17 @@ public class BiLPlayer extends JFrame implements WindowListener{
                 //Once JavaFX init has occurred, can play a MP3 using JavaFX Media/MediaPlayer classes
                 //TODO stopping, pausing, not blocking the GUI thread when the song is playing....
 
-                // TODO need a method here for forcing the player to play the first song if the user does not choose a row before hitting play
+                // TODO need a method here for forcing the player to play the first song if the user does not choose a row before hitting play. Also if the user chooses the "0" row, they should be kicked into the 1 row below it.
 //                if (player != null) {
 //                    if (player.getMedia().getSource().equals(audioURL)) { // to find out if the audio is already playing
 //                        player.pause();
 //                        System.out.println("already playing " + songTitle);
 //                    }
 //                }
-                // TODO need a proper toggle from pause to play. currently player simply restarts song
+                // TODO need a proper toggle from pause to play. currently player simply restarts song. IIRC, DON'T USE IF/ELSE BUT TWO IFS, one for isselected and the other for the other toggle state. otherwise, if/else will turn it on and then off right away
                 if(playButton.isSelected()){
+//                    Object audioURL = MusicDatabase.songData.get(2)[6];
+                    System.out.println(audioURL);
                     Media mediaObject = new Media((String) audioURL);
                     player = new MediaPlayer(mediaObject);
                     player.play();
@@ -176,12 +179,12 @@ public class BiLPlayer extends JFrame implements WindowListener{
 
             }
         });
-        albumTree.addTreeSelectionListener(new TreeSelectionListener() {
-            @Override
-            public void valueChanged(TreeSelectionEvent e) {
-
-            }
-        });
+//        albumTree.addTreeSelectionListener(new TreeSelectionListener() {
+//            @Override
+//            public void valueChanged(TreeSelectionEvent e) {
+//
+//            }
+//        });
     }
 
 

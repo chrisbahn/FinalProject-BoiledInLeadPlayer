@@ -5,6 +5,10 @@ package com.christopherbahn;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.table.DefaultTableModel;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -23,6 +27,7 @@ public class MusicDatabase {
     static Statement statement = null;
     static Connection conn = null;
     static ResultSet rs = null;
+    static ArrayList<String[]> songData = new ArrayList<String[]>();
 
     public final static String MUSIC_TABLE_NAME = "music";
     public final static String RELEASEORDER_COLUMN = "albumNumber";
@@ -35,54 +40,101 @@ public class MusicDatabase {
 // TODO need variables for: Artist ID (it may not always be Boiled In Lead! Make this an int, unique across all tables), Artist Name (String), Album ID (int, unique across all tables), Song ID (int, unique across all tables), Album art (links to a jpg, probably lives in the Album table), Audio (links to the audio file, probably lives in the Song table)
     // TODO Add an XML database with more information on the songs: Band members (bios?), lyrics, songwriting credits, Trivia (i.e. "Rasputin was originally performed by a German disco band."), playable video, Amazon link, Wikipedia page
 
-    private static MusicDataModel musicDataModel;
+//    private static MusicDataModel musicDataModel();
     private static MusicTreeModel musicTreeModel;
+    static DefaultTableModel musicDataModel = new DefaultTableModel(0,8);
+    Object[][] dataArray = new Object[0][0];
 
-    // TODO Should this main method be moved to the Main.java page?
+
     public static void main(String args[]) {
 
+        // TODO Instead of the two methods setup() and loadAllMusic(), which depend on SQL, I'm importing everything via a txt file.
+        readSongDataTextfile();
         //setup creates database (if it doesn't exist), opens connection, and adds sample data
-        setup();
-      //  loadAllMusic();
-        loadTreeData();
+//        setup();
+//        loadAllMusic();
+        // TODO part of the attempt to make the Jtree/TreeModel
+//        loadTreeData();
 
         //Start GUI
-//        final BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
-        final BiLPlayer biLPlayer = new BiLPlayer(musicTreeModel);
+        final BiLPlayer biLPlayer = new BiLPlayer(musicDataModel);
+//        final BiLPlayer biLPlayer = new BiLPlayer(musicTreeModel);
 
-        // TODO do I need this to help populate the JTree?
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-//                    biLPlayer.makeTree();
-                }
-            });
-
-
-
+        // TODO part of the attempt to make the Jtree/TreeModel
+//            SwingUtilities.invokeLater(new Runnable() {
+//                @Override
+//                public void run() {
+////                    biLPlayer.makeTree();
+//                }
+//            });
     }
+
+
+// TODO This method is converted from the Coffeeshop program in Assignment 6
+    protected static void readSongDataTextfile() {
+        // Imports data from songData.txt to songList
+        // data is placed into songData, a three-column array
+        ArrayList<String[]> songData = new ArrayList<String[]>();
+        try {
+            FileReader reader = new FileReader("/Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/src/main/java/com/christopherbahn/songData.txt");
+            BufferedReader bufReader = new BufferedReader(reader);
+            String line = bufReader.readLine();
+            // each line of data from the .txt is is placed into  String[], which is then put into an ArrayList, which will be passed into musicTableModel
+            while (line != null) {
+                String[] song = line.split(";");
+                line = bufReader.readLine();
+// Read each line of the original  data into an ArrayList
+                songData.add(song);
+//                System.out.println(line);
+//                System.out.println(song[6]);
+            }
+            reader.close();
+
+            for (int i = 0; i < songData.size(); i++){
+                Object[] data = {songData.get(i)};
+
+//                System.out.println(songData.get(i)[6]);
+                musicDataModel.addRow(songData.get(i));
+            }
+
+
+
+            // TODO This for loop would be useful to help manage the building of a TreeModel, but that's for a future version of the project
+//            for (String[] songs : songData) {
+                // If (trackNumber == 0), make this an Album object and the parent node of the songs following it
+                // If (trackNumber > 0) this is a Song object and a child node of the current Album object
+//                Coffee c = new Coffee(cuppaJoe[0], Double.parseDouble(cuppaJoe[1]), Double.parseDouble(cuppaJoe[2]));
+//                coffeeList.add(c);
+//            }
+        } catch (IOException ioe) {
+            System.out.println("Could not open or read requested .txt file");
+            System.out.println(ioe.toString());
+        }
+        return;
+    }
+
 
     //Create or recreate a ResultSet containing the whole database, and give it to musicDataModel
-    public static void loadAllMusic(){
-        try{
-            if (rs!=null) {
-                rs.close();
-            }
-            String getAllData = "SELECT * FROM music";
-            rs = statement.executeQuery(getAllData);
-
-            if (musicDataModel == null) {
-                //If no current musicDataModel, then make one
-                musicDataModel = new MusicDataModel(rs);
-            } else {
-                //Or, if one already exists, update its ResultSet
-                musicDataModel.updateResultSet(rs);
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading or reloading music");
-            System.out.println(e);
-        }
-    }
+//    public static void loadAllMusic(){
+//        try{
+//            if (rs!=null) {
+//                rs.close();
+//            }
+//            String getAllData = "SELECT * FROM music";
+//            rs = statement.executeQuery(getAllData);
+//
+//            if (musicDataModel == null) {
+//                //If no current musicDataModel, then make one
+//                musicDataModel = new MusicDataModel(rs);
+//            } else {
+//                //Or, if one already exists, update its ResultSet
+//                musicDataModel.updateResultSet(rs);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error loading or reloading music");
+//            System.out.println(e);
+//        }
+//    }
 
     //Create or recreate a ResultSet containing what albumTree needs to show, and give it to musicTreeModel
     public static void loadTreeData(){
@@ -173,9 +225,9 @@ public class MusicDatabase {
             //
             // TODO Once the database is proven to work, create another database that will include ALL the music. This will be imported into the program ONCE and then should not need to be imported again, if you've done everything right
             // NOTE that the audioURL column is used for the URL of an mp3 in the case of songs, and for the URL of an image file in the case of albums. They will be handled differently during creation of the JTree
-            String addDataSQL = "INSERT INTO music VALUES (1, 'Old Lead', 0, null, 1985, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-oldlead.jpg)";
+            String addDataSQL = "INSERT INTO music VALUES (1, 'Old Lead', 0, 'fsygudsf', 1985, 77, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-oldlead.jpg)";
             statement.executeUpdate(addDataSQL);
-            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 0, null, 1989, null, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-fromtheladletothegrave.jpg)";
+            addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 0, 'hgfhfd', 1989, 243, /Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/images/100px/albumcover-fromtheladletothegrave.jpg)";
             statement.executeUpdate(addDataSQL);
             addDataSQL = "INSERT INTO music VALUES (2, 'From the Ladle to the Grave', 1, 'Madman Blues', 1989, 847, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/1989FromtheLadletotheGrave/02MadmanMoraBlues.mp3')";
             statement.executeUpdate(addDataSQL);
@@ -234,6 +286,10 @@ public class MusicDatabase {
             addDataSQL = "INSERT INTO music VALUES (11, 'The Well Below', 4, 'Transylvanian Stomp', 2012, 867, 'file:///Users/christopherbahn/IdeaProjects/FinalProject-BoiledInLeadPlayer/audio/2012TheWellBelow/04TransylvanianStomp.mp3')";
             statement.executeUpdate(addDataSQL);
         } catch (SQLException se) {
+            if (se.getSQLState().startsWith("X0")) {
+                System.out.println("it starts with X0");
+                return;
+            }
             System.out.println("The Music table (probably) already exists, verify with following error message.");
             System.out.println(se);
         }
